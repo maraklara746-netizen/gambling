@@ -1,0 +1,26 @@
+# MinesPlugin Configuration
+
+# The wall will spawn this many blocks in front of the player
+wall-distance: 3
+
+# Minimum and maximum bet amounts
+min-bet: 1.0
+max-bet: 100000.0
+
+# Starting balance for new players
+starting-balance: 100.0
+
+# ── HTTP API ────────────────────────────────────────────────────────────────
+# The plugin hosts a small HTTP API so the Discord bot (on a different machine)
+# can create and check redemption keys. Make sure this port is open/forwarded.
+http-port: 25568
+
+# Secret shared between the plugin and the Discord bot — change this!
+http-api-secret: "changeme"
+
+# URL of the Discord bot's HTTP server — the plugin calls this for /redeem
+# Format: http://<bot-host-ip>:<httpPort>
+bot-api-url: "http://185.194.177.9:25573"
+
+# Multiplier note: multipliers are now calculated mathematically (Stake-style)
+# using probability and a 3% house edge. No config needed.

@@ -1,0 +1,91 @@
+package com.mines.plugin.data;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.mines.plugin.MinesPlugin;
+
+import java.io.*;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+
+public class KeysManager {
+
+    private final MinesPlugin plugin;
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final File keysFile;
+
+    public KeysManager(MinesPlugin plugin) {
+        this.plugin = plugin;
+        this.keysFile = new File(plugin.getDataFolder(), "keys.json");
+        plugin.getDataFolder().mkdirs();
+        plugin.getLogger().info("[MinesPlugin] Keys file: " + this.keysFile.getAbsolutePath());
+    }
+
+    public synchronized Map<String, KeyEntry> loadKeys() {
+        if (!keysFile.exists()) return new HashMap<>();
+        try (Reader reader = new FileReader(keysFile)) {
+            Type type = new TypeToken<Map<String, KeyEntry>>(){}.getType();
+            Map<String, KeyEntry> keys = gson.fromJson(reader, type);
+            return keys != null ? keys : new HashMap<>();
+        } catch (Exception e) {
+            plugin.getLogger().warning("Could not read keys file: " + e.getMessage());
+            return new HashMap<>();
+        }
+    }
+
+    public synchronized void saveKeys(Map<String, KeyEntry> keys) {
+        try {
+            keysFile.getParentFile().mkdirs();
+            try (Writer writer = new FileWriter(keysFile)) {
+                gson.toJson(keys, writer);
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Could not save keys file: " + e.getMessage());
+        }
+    }
+
+    /** Create a new key. Returns the code, or null if it already exists. */
+    public synchronized String createKey(String code, double amount, String createdBy) {
+        Map<String, KeyEntry> keys = loadKeys();
+        if (keys.containsKey(code)) return null;
+        keys.put(code, new KeyEntry(amount, createdBy));
+        saveKeys(keys);
+        return code;
+    }
+
+    /**
+     * Attempts to redeem a code.
+     * Returns the amount if successful, -1 if invalid, -2 if already used.
+     */
+    public synchronized double redeem(String code) {
+        code = code.toUpperCase().trim();
+        Map<String, KeyEntry> keys = loadKeys();
+        KeyEntry entry = keys.get(code);
+        if (entry == null) return -1;
+        if (entry.used) return -2;
+
+        entry.used = true;
+        entry.redeemedAt = System.currentTimeMillis();
+        keys.put(code, entry);
+        saveKeys(keys);
+        return entry.amount;
+    }
+
+    public static class KeyEntry {
+        public double amount;
+        public boolean used;
+        public long createdAt;
+        public long redeemedAt;
+        public String createdBy;
+
+        public KeyEntry() {}
+        public KeyEntry(double amount, String createdBy) {
+            this.amount = amount;
+            this.used = false;
+            this.createdAt = System.currentTimeMillis();
+            this.createdBy = createdBy;
+        }
+    }
+}
