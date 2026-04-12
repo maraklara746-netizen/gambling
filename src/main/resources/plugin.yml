@@ -1,0 +1,40 @@
+name: MinesPlugin
+version: 1.0.0
+main: com.mines.plugin.MinesPlugin
+api-version: '1.21'
+description: Stake-style Mines game for Minecraft
+authors: [MinesPlugin]
+
+commands:
+  mines:
+    description: Start a mines game with X mines
+    usage: /mines <amount_of_mines>
+    permission: mines.play
+  betamount:
+    description: Set your bet amount
+    usage: /betamount <amount>
+    permission: mines.play
+  redeem:
+    description: Redeem a balance code
+    usage: /redeem <code>
+    permission: mines.play
+  minesbalance:
+    description: Check your balance
+    usage: /minesbalance
+    permission: mines.play
+  minescashout:
+    description: Cash out current winnings
+    usage: /minescashout
+    permission: mines.play
+  minesadmin:
+    description: Admin commands
+    usage: /minesadmin <give|set|reset> <player> [amount]
+    permission: mines.admin
+
+permissions:
+  mines.play:
+    description: Allows playing the mines game
+    default: true
+  mines.admin:
+    description: Allows admin commands
+    default: op

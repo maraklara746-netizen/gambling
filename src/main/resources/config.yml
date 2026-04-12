@@ -1,0 +1,44 @@
+# MinesPlugin Configuration
+
+# The wall will spawn this many blocks in front of the player
+wall-distance: 3
+
+# Wall dimensions (6x6)
+wall-width: 6
+wall-height: 6
+
+# Minimum and maximum bet amounts
+min-bet: 1.0
+max-bet: 100000.0
+
+# Starting balance for new players
+starting-balance: 100.0
+
+# Multiplier table per mines count (mines -> multiplier per safe block revealed)
+# These are approximate Stake-style multipliers
+multipliers:
+  1: 1.08
+  2: 1.17
+  3: 1.28
+  4: 1.42
+  5: 1.58
+  6: 1.80
+  7: 2.07
+  8: 2.43
+  9: 2.94
+  10: 3.67
+  11: 4.77
+  12: 6.57
+  13: 9.77
+  14: 16.29
+  15: 32.58
+  16: 81.45
+  17: 325.8
+  18: 2441.0
+
+# Discord bot API URL (set this to your bot's HTTP server address)
+discord-api-url: "http://185.194.177.9:25573"
+discord-api-secret: "bapskonraihjs5tbihaij5nihj"
+
+# Keys file path (shared with Discord bot)
+keys-file: "plugins/MinesPlugin/keys.json"
