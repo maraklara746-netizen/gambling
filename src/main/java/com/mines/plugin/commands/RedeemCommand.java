@@ -34,8 +34,8 @@ public class RedeemCommand implements CommandExecutor {
         // Run HTTP call off the main thread so the server doesn't stutter
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
-                String botUrl = plugin.getConfig().getString("bot-api-url", "http://localhost:3000");
-                String secret = plugin.getConfig().getString("http-api-secret", "changeme");
+                String botUrl = plugin.getConfig().getString("discord-api-url", "http://185.194.177.9:25573");
+                String secret = plugin.getConfig().getString("discord-api-secret", "bapskonraihjs5tbihaij5nihj");
 
                 URL url = new URL(botUrl + "/redeemcode=" + code);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
